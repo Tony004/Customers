@@ -30,11 +30,30 @@
         }
     }
 
+//pagination
+	$query = "SELECT COUNT(*) as count FROM customers";
+	$result = mysqli_query($link, $query);
+	$count = mysqli_fetch_assoc($result)["count"];
+
+	if (isset($_GET["page"])){
+			$page = $_GET["page"];
+	}
+	else{
+		$page = 1;
+	}
+	$notes = 3;
+	$from = ($page-1) * $notes;
+	$pagesCount = ceil($count / $notes);
+	$prev = $page-1;
+	$next = $page+1;
+
 //Получение данных из БД
-    $query = "SELECT * FROM customers GROUP BY id DESC LIMIT 3";
+    $query = "SELECT * FROM customers GROUP BY id DESC LIMIT $from, $notes";
     $result = mysqli_query($link, $query);
     for ($data = []; $row = mysqli_fetch_assoc($result); $data[] = $row);
     $data = array_reverse($data);
+
+
 ?>
 
 
@@ -42,6 +61,35 @@
 <body>
     <div id="wrapper">
         <h1>Гостевая книга</h1>
+<!--Pagination-->
+		<div>
+			<nav>
+			  <ul class="pagination">
+				<li class="disable">
+					<?php
+					if ($page > 1)
+						echo "<a href=\"?page=$prev\"  aria-label=\"Previous\"><span>&laquo;</span></a>";
+					?>
+				</li>
+				<?php
+					for ($i = 1; $i <= $pagesCount; $i++){
+						if ($page == $i)
+							$class = " class='active'";
+						else
+							$class = '';
+
+							echo "<li$class><a href=\"?page=$i\">$i</a></li>";
+					}
+				?>
+				<li>
+					<?php
+					if ($page < $pagesCount)
+						echo "<a href=\"?page=$prev\"  aria-label=\"Previous\"><span>&raquo;</span></a>";
+					?>
+				</li>
+			  </ul>
+			</nav>
+		</div>
 
         <?php
         //Вывод на экран

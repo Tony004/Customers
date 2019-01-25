@@ -1,9 +1,9 @@
 #wrapper{
-
+	
 	width: 500px;
 	margin: 0px auto;
 	padding: 10px;
-
+	
 	text-align: justify;
 }
 #wrapper > div{
@@ -27,9 +27,5 @@ textarea.form-control{
 	min-height: 200px;
 	resize: vertical;
 	text-align: justify;
-
+	
 }
-
-/* .info{
-	visibility: hidden;
-} */
